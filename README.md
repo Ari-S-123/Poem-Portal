@@ -2,6 +2,8 @@
 
 Uses the PoetryDB API (https://poetrydb.org/) to present a user with a random poem.
 
+![alt text](https://raw.githubusercontent.com/Ari-S-123/Poem-Portal/refs/heads/main/Poem%20Portal%20Screenshot.png)
+
 ## Future Features:
 
 - [ ] Persistence Layer using Postgres on Vercel to save favorite poems with Prisma as the ORM and Google OAuth for
