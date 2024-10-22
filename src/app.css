@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.button {
+    cursor: pointer;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    padding: 1rem 2rem;
+    margin: 2rem;
+    font-weight: 700;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 9999px;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
