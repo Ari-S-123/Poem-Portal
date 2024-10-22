@@ -6,6 +6,8 @@ Uses the PoetryDB API (https://poetrydb.org/) to present a user with a random po
 
 ## Future Features:
 
+- [ ] Loading Spinner
+
 - [ ] Persistence Layer using Postgres on Vercel to save favorite poems with Prisma as the ORM and Google OAuth for
   Auth.
 
