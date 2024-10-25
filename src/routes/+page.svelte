@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Poem } from '$lib/types/poem';
 	import { getRandomPoem } from '$lib/api/poetry';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 
 	let loading = false;
 	let error: string | null = null;
@@ -18,19 +20,26 @@
 	};
 </script>
 
-<main class="container mx-auto flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
+<main class="container m-auto flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
 	{#if error}
 		<p class="text-red-500 mb-4">{error}</p>
 	{/if}
 	{#if poem}
 		<div>
-			<button
-				onclick={fetchPoem}
-				disabled={loading}
-				class="button dark:border-white hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
-			>
-				{loading ? 'Loading...' : 'Read Another'}
-			</button>
+			{#if loading}
+				<Button disabled class="my-4 cursor-not-allowed">
+					<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+					Getting Another Poem
+				</Button>
+			{:else}
+				<Button
+					variant="outline"
+					onclick={fetchPoem}
+					class="my-4 hover:scale-105 transition-all ease-in-out duration-300"
+				>
+					Read Another
+				</Button>
+			{/if}
 			<article class="mb-8">
 				<h1 class="text-2xl font-bold mb-2">{poem.title}</h1>
 				<h2 class="text-xl italic mb-4">by {poem.author}</h2>
@@ -41,13 +50,18 @@
 				</div>
 			</article>
 		</div>
+	{:else if loading}
+		<Button disabled class="cursor-not-allowed">
+			<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+			Getting A Poem
+		</Button>
 	{:else}
-		<button
+		<Button
+			variant="outline"
 			onclick={fetchPoem}
-			disabled={loading}
-			class="button dark:border-white hover:scale-105 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
+			class="hover:scale-105 transition-all ease-in-out duration-300"
 		>
-			{loading ? 'Loading...' : 'Read A Poem'}
-		</button>
+			Read A Poem
+		</Button>
 	{/if}
 </main>
