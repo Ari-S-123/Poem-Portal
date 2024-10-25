@@ -18,5 +18,5 @@ describe('getRandomPoem', () => {
 		expect(poem.author).not.toEqual('');
 		expect(poem.lines).toBeDefined();
 		expect(poem.lines.length).toBeGreaterThan(0);
-	}, 15000);
+	}, 10000);
 });

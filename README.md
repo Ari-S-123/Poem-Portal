@@ -9,12 +9,12 @@ Uses the PoetryDB API (https://poetrydb.org/) to present a user with a random po
 - [ ] Loading Spinner
 
 - [ ] Persistence Layer using Postgres on Vercel to save favorite poems with Prisma as the ORM and Google OAuth for
-  Auth.
+      Auth.
 
 ## How to run the app
 
 1. Clone the repo.
 
-2. Run ```npm install``` to install the dependencies.
+2. Run `npm install` to install the dependencies.
 
-3. Run ```npm run dev -- --open``` to start the development server and open the app in a new browser tab.
+3. Run `npm run dev -- --open` to start the development server and open the app in a new browser tab.

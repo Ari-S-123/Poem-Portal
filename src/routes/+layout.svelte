@@ -4,14 +4,15 @@
 	import { theme } from '$lib/stores/theme';
 
 	function toggleTheme() {
-		theme.update(current => current === 'dark' ? 'light' : 'dark');
+		theme.update((current) => (current === 'dark' ? 'light' : 'dark'));
 	}
 
 	let { children } = $props();
 </script>
 
 <div
-	class={`min-h-screen transition-colors duration-300 ${$theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}>
+	class={`min-h-screen transition-colors duration-300 ${$theme === 'dark' ? 'bg-black text-white' : 'bg-white text-black'}`}
+>
 	<nav class="p-4 flex justify-end">
 		<button
 			onclick={toggleTheme}
