@@ -18,7 +18,7 @@ to the top, but it will retain its functionality.
 
 Future Feature Additions:
 
-Add a persistence layer using Postgres probably on Vercel too, and Prisma as the ORM. This will contain just a single
+Add a persistence layer using Postgres probably on Vercel too, and Drizzle as the ORM. This will contain just a single
 table with a favoriteId, userId (Google ID), author, and a title as the columns.
 
 Add a "Log In" button with the Google logo to the top right next to the theme switcher. When the "Log In" button is
