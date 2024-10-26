@@ -1,5 +1,20 @@
 import type { Poem } from '$lib/types/poem';
 
+/**
+ * Fetch a random poem from the PoetryDB API
+ * @returns {Promise<Poem>} A promise that resolves to a random poem
+ * @throws {Error} If the request fails
+ * @example
+ * const poem = await getRandomPoem();
+ * console.log(poem.title, poem.author, poem.lines);
+ * // "The Raven" "Edgar Allan Poe" ["Once upon a midnight dreary...", ...]
+ * @see https://poetrydb.org/index.html#random
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+ */
 export const getRandomPoem = async (): Promise<Poem> => {
 	try {
 		const response = await fetch('https://poetrydb.org/random');
