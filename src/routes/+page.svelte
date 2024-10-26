@@ -4,9 +4,9 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 
-	let loading = false;
-	let error: string | null = null;
-	let poem: Poem | null = null;
+	let loading = $state(false);
+	let error: string | undefined = $state(undefined);
+	let poem: Poem | undefined = $state(undefined);
 
 	const fetchPoem = async () => {
 		loading = true;

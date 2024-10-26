@@ -1,4 +1,4 @@
-import { vi, describe, it, expect } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import Layout from '../../routes/+layout.svelte';
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
@@ -8,15 +8,15 @@ import { setMode, resetMode } from 'mode-watcher';
 interface AnimationEffect {
 	finished: Promise<void>;
 	cancel: () => void;
-	startTime: number | null;
-	currentTime: number | null;
+	startTime: number | undefined;
+	currentTime: number | undefined;
 }
 
 Element.prototype.animate = vi.fn().mockReturnValue({
 	finished: Promise.resolve(),
 	cancel: vi.fn(),
-	startTime: null,
-	currentTime: null
+	startTime: undefined,
+	currentTime: undefined
 } as AnimationEffect);
 
 vi.mock('svelte/animate', () => ({
@@ -33,6 +33,9 @@ vi.mock('mode-watcher', () => {
 });
 
 describe('Layout Component', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
 	it('should set correct page title and meta description', () => {
 		render(Layout);
 		expect(document.title).toBe('Poem Portal');
@@ -72,19 +75,21 @@ describe('Layout Component', () => {
 		expect(moonIcon).toBeInTheDocument();
 	});
 	it('clicking dark mode toggle changes symbol', async () => {
+		const user = userEvent.setup();
 		render(Layout);
 		const toggleButton = screen.getByRole('button', { name: /toggle theme/i });
-		await userEvent.click(toggleButton);
+		await user.click(toggleButton);
 		const darkOption = screen.getByText('Dark');
-		await userEvent.click(darkOption);
+		await user.click(darkOption);
 		expect(setMode).toHaveBeenCalledWith('dark');
 	});
 	it('clicking light mode toggle changes symbol', async () => {
+		const user = userEvent.setup();
 		render(Layout);
 		const toggleButton = screen.getByRole('button', { name: /toggle theme/i });
-		await userEvent.click(toggleButton);
+		await user.click(toggleButton);
 		const lightOption = screen.getByText('Light');
-		await userEvent.click(lightOption);
+		await user.click(lightOption);
 		expect(setMode).toHaveBeenCalledWith('light');
 	});
 });
