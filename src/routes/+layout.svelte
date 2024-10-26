@@ -8,7 +8,16 @@
 	let { children } = $props();
 </script>
 
+<svelte:head>
+	<title>Poem Portal</title>
+	<meta
+		name="description"
+		content="Poem Portal is an app that surprises poetry enthusiasts with a random poem."
+	/>
+</svelte:head>
+
 <ModeWatcher />
+
 <div class="min-h-screen transition-colors duration-300">
 	<nav class="p-4 flex justify-end">
 		<DropdownMenu.Root>
