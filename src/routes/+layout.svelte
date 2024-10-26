@@ -39,5 +39,5 @@
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</nav>
-	{@render children()}
+	{@render children?.()}
 </div>
