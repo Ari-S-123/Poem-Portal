@@ -32,13 +32,7 @@
 					Getting Another Poem
 				</Button>
 			{:else}
-				<Button
-					variant="outline"
-					onclick={fetchPoem}
-					class="my-4 hover:scale-105 transition-all ease-in-out duration-300"
-				>
-					Read Another
-				</Button>
+				<Button variant="outline" onclick={fetchPoem} class="my-4">Read Another</Button>
 			{/if}
 			<article class="mb-8">
 				<h1 class="text-2xl font-bold mb-2">{poem.title}</h1>
@@ -56,12 +50,6 @@
 			Getting A Poem
 		</Button>
 	{:else}
-		<Button
-			variant="outline"
-			onclick={fetchPoem}
-			class="hover:scale-105 transition-all ease-in-out duration-300"
-		>
-			Read A Poem
-		</Button>
+		<Button variant="outline" onclick={fetchPoem}>Read A Poem</Button>
 	{/if}
 </main>
