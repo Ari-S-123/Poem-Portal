@@ -6,9 +6,23 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { setContext, getContext } from 'svelte';
+	import type { Auth } from '$lib/types/auth';
 
-	let loggedIn = $state(false);
-	let username = $state('Username');
+	let authState: Auth = $state({
+		isLoggedIn: false,
+		showFavorites: false,
+		login: () => (authState.isLoggedIn = true),
+		logout: () => {
+			authState.isLoggedIn = false;
+			authState.showFavorites = false;
+		},
+		username: 'Username'
+	});
+
+	setContext('auth', authState);
+
+	const auth: Auth = getContext('auth');
 	let { children } = $props();
 </script>
 
@@ -24,7 +38,7 @@
 
 <div class="min-h-screen transition-colors duration-300">
 	<nav class="p-4 flex gap-4 justify-end">
-		{#if loggedIn}
+		{#if auth.isLoggedIn}
 			<div class="flex flex-row justify-center items-center gap-4">
 				<Avatar.Root data-testid="avatar">
 					<Avatar.Fallback>
@@ -32,16 +46,11 @@
 					</Avatar.Fallback>
 					<span class="sr-only">Avatar</span>
 				</Avatar.Root>
-				<p class="font-bold">Welcome, {username}</p>
+				<p class="font-bold">Welcome, {auth.username}</p>
 			</div>
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
-					<Button
-						builders={[builder]}
-						variant="outline"
-						size="icon"
-						onclick={() => (loggedIn = false)}
-					>
+					<Button builders={[builder]} variant="outline" size="icon" onclick={auth.logout}>
 						<LogOut class="h-4 w-4" />
 						<span class="sr-only">Logout</span>
 					</Button>
@@ -53,12 +62,7 @@
 		{:else}
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
-					<Button
-						builders={[builder]}
-						variant="outline"
-						size="icon"
-						onclick={() => (loggedIn = true)}
-					>
+					<Button builders={[builder]} variant="outline" size="icon" onclick={auth.login}>
 						<LogIn class="h-4 w-4" />
 						<span class="sr-only">Login</span>
 					</Button>
