@@ -3,9 +3,16 @@
 	import { getRandomPoem, getPoemByTitleAndAuthor } from '$lib/api/poetry';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import Trash from 'lucide-svelte/icons/trash';
+	import Star from 'lucide-svelte/icons/star';
 	import { getContext } from 'svelte';
 	import type { Auth } from '$lib/types/auth';
-	import { DUMMY_FAVORITE_1, DUMMY_FAVORITE_2 } from '../tests/test-dummies/favorites';
+	import { deleteFavorite, getOrCreateFavorite } from '$lib/db';
+
+	// TODO: Move deleteFavorite, getOrCreateFavorite usages to server-side and update tests
+
+
+	const { data } = $props();
 
 	const auth: Auth = getContext('auth');
 	let loading = $state(false);
@@ -36,7 +43,7 @@
 		}
 	};
 
-	const favorites = [DUMMY_FAVORITE_1, DUMMY_FAVORITE_2];
+	const favorites = $state(data.favorites);
 </script>
 
 <main
@@ -57,8 +64,8 @@
 					<Button variant="outline" onclick={fetchRandomPoem}>Read Another</Button>
 					{#if auth.isLoggedIn}
 						<Button variant="outline" onclick={() => (auth.showFavorites = !auth.showFavorites)}
-							>Favorites</Button
-						>
+							>Favorites
+						</Button>
 					{/if}
 				{/if}
 			</div>
@@ -74,6 +81,14 @@
 							}}
 						>
 							<div class="flex flex-col gap-2">
+								<div class="flex flex-row gap-1">
+									<Trash
+										class="h-4 w-4 m-4"
+										onclick={() => {
+											deleteFavorite(auth.user_id, favorite.author, favorite.title);
+										}}
+									/>
+								</div>
 								<b>{favorite.title}</b>
 								<i>by {favorite.author}</i>
 							</div>
@@ -81,6 +96,15 @@
 					{/each}
 				</div>
 			{:else}
+				{#if auth.isLoggedIn}
+					<Star
+						class="h-4 w-4 my-4"
+						onclick={() => {
+							if (poem === undefined) console.error('No poem to favorite');
+							else getOrCreateFavorite(auth.user_id, poem.author, poem?.title);
+						}}
+					/>
+				{/if}
 				<article class="mb-8">
 					<h1 class="text-2xl font-bold mb-2">{poem.title}</h1>
 					<h2 class="text-xl italic mb-4">by {poem.author}</h2>
@@ -101,8 +125,8 @@
 		<Button variant="outline" onclick={fetchRandomPoem}>Read A Poem</Button>
 		{#if auth.isLoggedIn}
 			<Button variant="outline" onclick={() => (auth.showFavorites = !auth.showFavorites)}
-				>Favorites</Button
-			>
+				>Favorites
+			</Button>
 			{#if auth.showFavorites}
 				<div class="flex flex-col gap-4">
 					{#each favorites as favorite}
@@ -115,6 +139,12 @@
 							}}
 						>
 							<div class="flex flex-col gap-2">
+								<Trash
+									class="h-4 w-4 m-4"
+									onclick={() => {
+										deleteFavorite(auth.user_id, favorite.author, favorite.title);
+									}}
+								/>
 								<b>{favorite.title}</b>
 								<i>by {favorite.author}</i>
 							</div>

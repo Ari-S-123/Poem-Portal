@@ -8,22 +8,39 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { setContext, getContext } from 'svelte';
 	import type { Auth } from '$lib/types/auth';
+	import { goto, invalidate } from '$app/navigation';
+
+	const { data: propsData, children } = $props();
+
+	const { supabase, session, user } = propsData;
+
+	$effect(() => {
+		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+			if (!newSession) {
+				setTimeout(() => {
+					goto('/', { invalidateAll: true });
+				});
+			}
+			if (newSession?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+		return () => data.subscription.unsubscribe();
+	});
 
 	let authState: Auth = $state({
-		isLoggedIn: false,
+		isLoggedIn: user !== null,
 		showFavorites: false,
-		login: () => (authState.isLoggedIn = true),
-		logout: () => {
-			authState.isLoggedIn = false;
-			authState.showFavorites = false;
-		},
-		username: 'Username'
+		username:
+			user?.user_metadata.preferred_username ??
+			user?.user_metadata.user_name ??
+			user?.user_metadata.name,
+		user_id: user?.id ?? ''
 	});
 
 	setContext('auth', authState);
 
 	const auth: Auth = getContext('auth');
-	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -41,6 +58,7 @@
 		{#if auth.isLoggedIn}
 			<div class="flex flex-row justify-center items-center gap-4">
 				<Avatar.Root data-testid="avatar">
+					<Avatar.Image src={user?.user_metadata.avatar_url} alt="GitHub Profile Picture" />
 					<Avatar.Fallback>
 						<User />
 					</Avatar.Fallback>
@@ -50,7 +68,7 @@
 			</div>
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon" onclick={auth.logout}>
+					<Button builders={[builder]} variant="outline" size="icon" href="/auth/logout">
 						<LogOut class="h-4 w-4" />
 						<span class="sr-only">Logout</span>
 					</Button>
@@ -62,13 +80,13 @@
 		{:else}
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon" onclick={auth.login}>
+					<Button builders={[builder]} variant="outline" size="icon" href="/auth/login/github">
 						<LogIn class="h-4 w-4" />
-						<span class="sr-only">Login</span>
+						<span class="sr-only">Login with GitHub</span>
 					</Button>
 				</Tooltip.Trigger>
 				<Tooltip.Content>
-					<p>Login</p>
+					<p>Login with GitHub</p>
 				</Tooltip.Content>
 			</Tooltip.Root>
 		{/if}
