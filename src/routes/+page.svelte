@@ -7,12 +7,9 @@
 	import Star from 'lucide-svelte/icons/star';
 	import { getContext } from 'svelte';
 	import type { Auth } from '$lib/types/auth';
-	import { deleteFavorite, getOrCreateFavorite } from '$lib/db';
+	import type { Favorite } from '$lib/types/favorite';
 
-	// TODO: Move deleteFavorite, getOrCreateFavorite usages to server-side and update tests
-
-
-	const { data } = $props();
+	// TODO: Lots of frontend refactoring and updating tests
 
 	const auth: Auth = getContext('auth');
 	let loading = $state(false);
@@ -43,7 +40,46 @@
 		}
 	};
 
-	const favorites = $state(data.favorites);
+	const fetchFavorites = async () => {
+		const response = await fetch('/favorites/get-favorites');
+		if (response.status !== 200) {
+			console.error('Error fetching favorites:', response.statusText);
+			error = 'Error fetching favorites';
+			return;
+		}
+		const data = await response.json();
+		favorites = data.favorites;
+	};
+
+	const postFavorite = async (author: string, title: string) => {
+		const response = await fetch('/favorites/create-favorite', {
+			method: 'POST',
+			body: JSON.stringify({ author, title }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		if (response.status !== 201) {
+			console.error('Error creating favorite:', response.statusText);
+			error = 'Error creating favorite';
+		}
+	};
+
+	const removeFavorite = async (author: string, title: string) => {
+		const response = await fetch('favorites/delete-favorite', {
+			method: 'DELETE',
+			body: JSON.stringify({ author, title }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		if (response.status !== 204) {
+			console.error('Error deleting favorite:', response.statusText);
+			error = 'Error deleting favorite';
+		}
+	};
+
+	let favorites: Favorite[] = $state([]);
 </script>
 
 <main
@@ -63,47 +99,63 @@
 				{:else}
 					<Button variant="outline" onclick={fetchRandomPoem}>Read Another</Button>
 					{#if auth.isLoggedIn}
-						<Button variant="outline" onclick={() => (auth.showFavorites = !auth.showFavorites)}
+						<Button
+							variant="outline"
+							onclick={async () => {
+								if (!auth.showFavorites) await fetchFavorites();
+								auth.showFavorites = !auth.showFavorites;
+							}}
 							>Favorites
 						</Button>
 					{/if}
 				{/if}
 			</div>
-			{#if auth.showFavorites}
+			{#if auth.showFavorites && favorites.length > 0}
 				<div class="flex flex-col gap-4">
 					{#each favorites as favorite}
-						<Button
-							variant="outline"
-							size="lg"
-							class="p-8"
-							onclick={() => {
-								fetchPoemByTitleAndAuthor(favorite.author, favorite.title);
-							}}
-						>
-							<div class="flex flex-col gap-2">
-								<div class="flex flex-row gap-1">
-									<Trash
-										class="h-4 w-4 m-4"
-										onclick={() => {
-											deleteFavorite(auth.user_id, favorite.author, favorite.title);
-										}}
-									/>
+						<div class="flex flex-row items-center justify-center">
+							<Button
+								variant="outline"
+								size="lg"
+								class="p-8 flex flex-row justify-between"
+								onclick={() => {
+									fetchPoemByTitleAndAuthor(favorite.author, favorite.title);
+								}}
+							>
+								<div class="flex flex-col gap-2">
+									<b>{favorite.title}</b>
+									<i>by {favorite.author}</i>
 								</div>
-								<b>{favorite.title}</b>
-								<i>by {favorite.author}</i>
-							</div>
-						</Button>
+							</Button>
+							<Trash
+								class="h-8 w-8 m-4 text-red-700 hover:fill-red-700 hover:cursor-pointer"
+								onclick={() => removeFavorite(favorite.author, favorite.title)}
+							/>
+						</div>
 					{/each}
 				</div>
 			{:else}
 				{#if auth.isLoggedIn}
-					<Star
-						class="h-4 w-4 my-4"
-						onclick={() => {
-							if (poem === undefined) console.error('No poem to favorite');
-							else getOrCreateFavorite(auth.user_id, poem.author, poem?.title);
-						}}
-					/>
+					{#if favorites.some((favorite) => {
+						if (poem === undefined) console.error('No poem to favorite');
+						else return favorite.author === poem.author && favorite.title === poem.title;
+					})}
+						<Star
+							class="h-8 w-8 my-4 text-yellow-400 fill-yellow-400 hover:fill-background hover:cursor-pointer"
+							onclick={() => {
+								if (poem === undefined) console.error('No poem to delete');
+								else removeFavorite(poem.author, poem.title);
+							}}
+						/>
+					{:else}
+						<Star
+							class="h-8 w-8 my-4 text-yellow-400 hover:fill-yellow-400 hover:cursor-pointer"
+							onclick={() => {
+								if (poem === undefined) console.error('No poem to favorite');
+								else postFavorite(poem.author, poem.title);
+							}}
+						/>
+					{/if}
 				{/if}
 				<article class="mb-8">
 					<h1 class="text-2xl font-bold mb-2">{poem.title}</h1>
@@ -124,31 +176,36 @@
 	{:else}
 		<Button variant="outline" onclick={fetchRandomPoem}>Read A Poem</Button>
 		{#if auth.isLoggedIn}
-			<Button variant="outline" onclick={() => (auth.showFavorites = !auth.showFavorites)}
+			<Button
+				variant="outline"
+				onclick={async () => {
+					if (!auth.showFavorites) await fetchFavorites();
+					auth.showFavorites = !auth.showFavorites;
+				}}
 				>Favorites
 			</Button>
-			{#if auth.showFavorites}
+			{#if auth.showFavorites && favorites.length > 0}
 				<div class="flex flex-col gap-4">
 					{#each favorites as favorite}
-						<Button
-							variant="outline"
-							size="lg"
-							class="p-8"
-							onclick={() => {
-								fetchPoemByTitleAndAuthor(favorite.author, favorite.title);
-							}}
-						>
-							<div class="flex flex-col gap-2">
-								<Trash
-									class="h-4 w-4 m-4"
-									onclick={() => {
-										deleteFavorite(auth.user_id, favorite.author, favorite.title);
-									}}
-								/>
-								<b>{favorite.title}</b>
-								<i>by {favorite.author}</i>
-							</div>
-						</Button>
+						<div class="flex flex-row items-center justify-center">
+							<Button
+								variant="outline"
+								size="lg"
+								class="p-8 flex flex-row justify-between"
+								onclick={() => {
+									fetchPoemByTitleAndAuthor(favorite.author, favorite.title);
+								}}
+							>
+								<div class="flex flex-col gap-2">
+									<b>{favorite.title}</b>
+									<i>by {favorite.author}</i>
+								</div>
+							</Button>
+							<Trash
+								class="h-8 w-8 m-4 text-red-700 hover:fill-red-700 hover:cursor-pointer"
+								onclick={() => removeFavorite(favorite.author, favorite.title)}
+							/>
+						</div>
 					{/each}
 				</div>
 			{/if}

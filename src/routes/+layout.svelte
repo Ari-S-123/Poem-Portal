@@ -34,8 +34,7 @@
 		username:
 			user?.user_metadata.preferred_username ??
 			user?.user_metadata.user_name ??
-			user?.user_metadata.name,
-		user_id: user?.id ?? ''
+			user?.user_metadata.name
 	});
 
 	setContext('auth', authState);
