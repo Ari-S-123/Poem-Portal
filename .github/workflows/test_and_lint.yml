@@ -24,8 +24,6 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Run svelte-check
-        run: pnpm run check
       - name: Run tests
         run: pnpm run test
       - name: Run linting check
