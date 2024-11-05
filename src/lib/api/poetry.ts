@@ -1,4 +1,5 @@
 import type { Poem } from '$lib/types/poem';
+import { toast } from 'svelte-sonner';
 
 /**
  * Fetch a random poem from the PoetryDB API
@@ -21,7 +22,7 @@ export const getRandomPoem = async (): Promise<Poem> => {
 		const [poem] = await response.json();
 		return poem;
 	} catch (error) {
-		console.error('Error fetching poem:', error);
+		toast.error('Error fetching poem: ' + error);
 		throw error;
 	}
 };
@@ -48,7 +49,7 @@ export const getPoemByTitleAndAuthor = async (author: string, title: string): Pr
 		const [poem] = await response.json();
 		return poem;
 	} catch (error) {
-		console.error('Error fetching poem:', error);
+		toast.error('Error fetching poem: ' + error);
 		throw error;
 	}
 };
