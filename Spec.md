@@ -19,10 +19,10 @@ to the top, but it will retain its functionality.
 Future Feature Additions:
 
 Add a persistence layer using Postgres probably on Vercel too, and Drizzle as the ORM. This will contain just a single
-table with a favoriteId, userId (Google ID), author, and a title as the columns.
+table with a favoriteId, userId (Google ID/GitHub ID), author, and a title as the columns.
 
-Add a "Log In" button with the Google logo to the top right next to the theme switcher. When the "Log In" button is
-clicked, the user will be prompted to log in via Google. After this, the page would re-render to display the name of the
+Add a "Log In" button to the top right next to the theme switcher. When the "Log In" button is
+clicked, the user will be prompted to log in via an Auth provider. After this, the page would re-render to display the name of the
 user instead of the "Log In" button.
 
 If the user is logged in, then there will be an additional button called "Favorites" and the user's name would be
