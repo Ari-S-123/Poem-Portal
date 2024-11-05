@@ -52,6 +52,11 @@
 		}
 		const data = await response.json();
 		favorites = data.favorites;
+		if (favorites.length === 0) {
+			toast.info('No favorites found');
+		} else {
+			toast.success('Favorites fetched successfully!');
+		}
 	};
 
 	const postFavorite = async (author: string, title: string) => {
