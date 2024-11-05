@@ -9,6 +9,7 @@
 	import { setContext, getContext } from 'svelte';
 	import type { Auth } from '$lib/types/auth';
 	import { goto, invalidate } from '$app/navigation';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	const { data: propsData, children } = $props();
 
@@ -51,6 +52,7 @@
 </svelte:head>
 
 <ModeWatcher />
+<Toaster />
 
 <div class="min-h-screen transition-colors duration-300">
 	<nav class="p-4 flex gap-4 justify-end">
@@ -107,7 +109,13 @@
 				<DropdownMenu.Item on:click={() => resetMode()}>System</DropdownMenu.Item>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
-		<Button href="https://github.com/Ari-S-123/Poem-Portal" size="icon" variant="outline">
+		<Button
+			target="_blank"
+			rel="noreferrer noopener"
+			href="https://github.com/Ari-S-123/Poem-Portal"
+			size="icon"
+			variant="outline"
+		>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				width="24"
