@@ -125,7 +125,7 @@
 							</DeleteFavoriteButton>
 						</div>
 					{:else}
-						<div class="my-2 p-2">
+						<div class="my-2">
 							<CreateFavoriteButton createFavorite={postFavorite} {poem}>
 								<Star class="h-6 w-6" />
 							</CreateFavoriteButton>
