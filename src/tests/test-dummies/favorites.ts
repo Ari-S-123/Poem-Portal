@@ -8,7 +8,7 @@ export const DUMMY_FAVORITE_1: Favorite = {
 };
 export const DUMMY_FAVORITE_2: Favorite = {
 	id: '2',
-	user_id: '2',
+	user_id: '1',
 	title: "A Lover's Complaint",
 	author: 'William Shakespeare'
 };

@@ -17,5 +17,8 @@
 		if (!auth.showFavorites) await fetchFavorites();
 		auth.showFavorites = !auth.showFavorites;
 	}}
-	>Favorites
+>
+	{#if auth.showFavorites}
+		Hide Favorites{:else}
+		Show Favorites{/if}
 </Button>

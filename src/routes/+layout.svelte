@@ -2,8 +2,8 @@
 	import '../app.css';
 	import { Moon, Sun, LogIn, LogOut, User } from 'lucide-svelte';
 	import { resetMode, setMode, ModeWatcher } from 'mode-watcher';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { setContext, getContext } from 'svelte';
@@ -67,46 +67,60 @@
 				</Avatar.Root>
 				<p class="font-bold">Welcome, {auth.username}</p>
 			</div>
-			<Tooltip.Root>
-				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon" href="/auth/logout">
-						<LogOut class="h-4 w-4" />
-						<span class="sr-only">Logout</span>
-					</Button>
-				</Tooltip.Trigger>
-				<Tooltip.Content>
-					<p>Logout</p>
-				</Tooltip.Content>
-			</Tooltip.Root>
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<div>
+							<Button variant="outline" size="icon" href="/auth/logout">
+								<LogOut class="h-4 w-4" />
+								<span class="sr-only">Logout</span>
+							</Button>
+						</div>
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						<p>Logout</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 		{:else}
-			<Tooltip.Root>
-				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon" href="/auth/login/github">
-						<LogIn class="h-4 w-4" />
-						<span class="sr-only">Login with GitHub</span>
-					</Button>
-				</Tooltip.Trigger>
-				<Tooltip.Content>
-					<p>Login with GitHub</p>
-				</Tooltip.Content>
-			</Tooltip.Root>
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<div>
+							<Button variant="outline" size="icon" href="/auth/login/github">
+								<LogIn class="h-4 w-4" />
+								<span class="sr-only">Login with GitHub</span>
+							</Button>
+						</div>
+					</Tooltip.Trigger>
+					<Tooltip.Content>
+						<p>Login with GitHub</p>
+					</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 		{/if}
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger asChild let:builder>
-				<Button builders={[builder]} variant="outline" size="icon">
-					<Sun
-						class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-					/>
-					<Moon
-						class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-					/>
-					<span class="sr-only">Toggle theme</span>
-				</Button>
+			<DropdownMenu.Trigger class={buttonVariants({ variant: 'outline', size: 'icon' })}>
+				<Sun
+					class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+				/>
+				<Moon
+					class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+				/>
+				<span class="sr-only">Toggle theme</span>
 			</DropdownMenu.Trigger>
-			<DropdownMenu.Content align="end">
-				<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
-				<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
-				<DropdownMenu.Item on:click={() => resetMode()}>System</DropdownMenu.Item>
+			<DropdownMenu.Content>
+				<DropdownMenu.Group>
+					<DropdownMenu.Item class="cursor-pointer" onclick={() => setMode('light')}
+						>Light</DropdownMenu.Item
+					>
+					<DropdownMenu.Item class="cursor-pointer" onclick={() => setMode('dark')}
+						>Dark</DropdownMenu.Item
+					>
+					<DropdownMenu.Item class="cursor-pointer" onclick={() => resetMode()}
+						>System</DropdownMenu.Item
+					>
+				</DropdownMenu.Group>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 		<Button

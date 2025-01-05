@@ -15,8 +15,6 @@
 	import { mode } from 'mode-watcher';
 	import { toast } from 'svelte-sonner';
 
-	// TODO: Updating unit tests
-
 	const auth: Auth = getContext('auth');
 	let loading = $state(false);
 	let poem: Poem | undefined = $state(undefined);
@@ -34,6 +32,14 @@
 	};
 
 	const fetchPoemByTitleAndAuthor = async (author: string, title: string) => {
+		if (author === '' || title === '') {
+			toast.error('Author and title must not be empty when fetching a poem');
+			return;
+		}
+		if (author === poem?.author && title === poem?.title) {
+			auth.showFavorites = false;
+			return;
+		}
 		auth.showFavorites = false;
 		loading = true;
 		try {
@@ -60,6 +66,10 @@
 	};
 
 	const postFavorite = async (author: string, title: string) => {
+		if (author === '' || title === '') {
+			toast.error('Author and title must not be empty when creating a favorite');
+			return;
+		}
 		const response = await fetch('/favorites/create-favorite', {
 			method: 'POST',
 			body: JSON.stringify({ author, title }),
@@ -75,6 +85,10 @@
 	};
 
 	const removeFavorite = async (author: string, title: string) => {
+		if (author === '' || title === '') {
+			toast.error('Author and title must not be empty when deleting a favorite');
+			return;
+		}
 		const response = await fetch('favorites/delete-favorite', {
 			method: 'DELETE',
 			body: JSON.stringify({ author, title }),
@@ -119,13 +133,13 @@
 						if (poem === undefined) toast.error('No poem to favorite');
 						else return favorite.author === poem.author && favorite.title === poem.title;
 					})}
-						<div class="my-2 p-2">
+						<div class="my-2">
 							<DeleteFavoriteButton {removeFavorite} author={poem.author} title={poem.title}>
 								<Star class="h-6 w-6" fill={$mode === 'dark' ? '#fafafa' : '#18181b'} />
 							</DeleteFavoriteButton>
 						</div>
 					{:else}
-						<div class="my-2 p-2">
+						<div class="my-2">
 							<CreateFavoriteButton createFavorite={postFavorite} {poem}>
 								<Star class="h-6 w-6" />
 							</CreateFavoriteButton>
