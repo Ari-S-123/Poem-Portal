@@ -8,7 +8,7 @@
 	let { poem }: PoemViewProps = $props();
 </script>
 
-<article class="mb-8">
+<article aria-label="The poem that was fetched" class="mb-8">
 	<h1 class="text-2xl font-bold mb-2">{poem.title}</h1>
 	<h2 class="text-xl italic mb-4">by {poem.author}</h2>
 	<div class="space-y-2">

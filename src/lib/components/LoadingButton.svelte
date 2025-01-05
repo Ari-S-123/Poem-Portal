@@ -10,6 +10,6 @@
 </script>
 
 <Button aria-label="Loading" disabled class="cursor-not-allowed">
-	<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+	<LoaderCircle data-testid="loader-circle" class="mr-2 h-4 w-4 animate-spin" />
 	{label}
 </Button>
