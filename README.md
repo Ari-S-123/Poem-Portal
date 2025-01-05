@@ -17,7 +17,7 @@ Uses the PoetryDB API (https://poetrydb.org/) to present a user with a random po
 
 1. Clone the repo.
 
-2. Make sure you are using Node 20 and have Docker and Supabase installed.
+2. Make sure you are using Node 22 and have Docker and Supabase installed.
 
 3. Run `npm install -g pnpm` to install pnpm.
 
