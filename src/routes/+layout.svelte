@@ -57,7 +57,8 @@
 <div class="min-h-screen transition-colors duration-300">
 	<nav class="p-4 flex gap-4 justify-end">
 		<h1
-			class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl absolute left-0 right-0 mx-auto text-center z-[-1]">
+			class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl absolute left-0 right-0 mx-auto text-center z-[-1]"
+		>
 			Poem Portal
 		</h1>
 		{#if auth.isLoggedIn}
@@ -116,17 +117,14 @@
 			<DropdownMenu.Content>
 				<DropdownMenu.Group>
 					<DropdownMenu.Item class="cursor-pointer" onclick={() => setMode('light')}
-					>Light
-					</DropdownMenu.Item
-					>
+						>Light
+					</DropdownMenu.Item>
 					<DropdownMenu.Item class="cursor-pointer" onclick={() => setMode('dark')}
-					>Dark
-					</DropdownMenu.Item
-					>
+						>Dark
+					</DropdownMenu.Item>
 					<DropdownMenu.Item class="cursor-pointer" onclick={() => resetMode()}
-					>System
-					</DropdownMenu.Item
-					>
+						>System
+					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
