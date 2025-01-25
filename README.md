@@ -2,7 +2,7 @@
 
 Uses the PoetryDB API (https://poetrydb.org/) to present a user with a random poem.
 
-![Screenshot](https://github.com/user-attachments/assets/2faece0d-8f90-4965-b6b1-1e2d0b10b7d0)
+![image](https://github.com/user-attachments/assets/d8495393-3909-4c3a-b0a6-ea2458e3153e)
 
 ## Future Features:
 
