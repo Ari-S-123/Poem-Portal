@@ -57,7 +57,7 @@
 
 <div class="min-h-screen transition-colors duration-300">
 	<nav class="p-4 flex gap-4 justify-between">
-		<h1 class="text-5xl font-extrabold flex items-center">Poem Portal</h1>
+		<h1 class="text-5xl font-extrabold flex items-center">📖Poem Portal</h1>
 		<div class="p-4 flex gap-4">
 			{#if auth.isLoggedIn}
 				<div class="flex flex-row justify-center items-center gap-4">
