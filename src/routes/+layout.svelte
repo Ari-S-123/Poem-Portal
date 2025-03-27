@@ -45,10 +45,10 @@
 </script>
 
 <svelte:head>
-	<title>Poem Portal</title>
+	<title>PoemPortal</title>
 	<meta
 		name="description"
-		content="Poem Portal is an app that surprises poetry enthusiasts with a random poem."
+		content="PoemPortal is an app that surprises poetry enthusiasts with a random poem."
 	/>
 </svelte:head>
 
@@ -57,7 +57,7 @@
 
 <div class="min-h-screen transition-colors duration-300">
 	<nav class="p-4 flex gap-4 justify-between">
-		<h1 class="text-5xl font-extrabold flex items-center">📖Poem Portal</h1>
+		<h1 class="text-5xl font-extrabold flex items-center">📖PoemPortal</h1>
 		<div class="p-4 flex gap-4">
 			{#if auth.isLoggedIn}
 				<div class="flex flex-row justify-center items-center gap-4">
